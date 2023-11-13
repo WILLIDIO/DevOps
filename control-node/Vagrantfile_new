@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "control-node" do |node|
+    node.vm.box = "generic/rocky8"
+    node.vm.hostname = "control-node"
+
+    # Para deixar a placa com IP fixo
+    node.vm.network "private_network", ip: "192.168.1.2"
+
+    # Configuração da pasta sincronizada usando VirtualBox Shared Folders
+    node.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+
+    # Configuração da provisão com shell script
+    node.vm.provision "shell", path: "provision.sh"
+    node.vm.box_download_insecure = true
+
+    # Configura o provider como VirtualBox
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+  end
+end
