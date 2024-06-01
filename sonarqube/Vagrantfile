@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+    config.vm.box = "generic/rocky8"
+    config.vm.hostname = "sonar-lab"
+
+    # arquivo de provisionamento
+    config.vm.provision "shell", path:"provision.sh"
+
+    config.vm.network "private_network", ip: "192.168.1.6"
+    config.vm.network "forwarded_port", guest: 9000, host: 9000, host_ip: "127.0.0.1"
+    
+    config.vm.provider "libvirt" do |libvirt|
+        libvirt.memory = 1024
+        libvirt.cpus = 2
+    end
+end
+
+# Configura o provider como VirtualBox
+# config.vm.provider "virtualbox" do |vb|
+#   vb.memory = 1024
+#   vb.cpus = 2
+# end
